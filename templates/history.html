@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import section_mark %}
+{% block title %}History · Resume Analyzer{% endblock %}
+{% block content %}
+<section class="sheet sheet-wide">
+  {{ section_mark('04', 'Session history') }}
+
+  <div class="report-head">
+    <h1 class="display display-md">Collected <em>reports.</em></h1>
+    <span class="count-box">N = {{ evaluations|length }}</span>
+  </div>
+
+  {% if evaluations %}
+  <table class="ledger">
+    <thead>
+      <tr><th scope="col">No.</th><th scope="col">Candidate</th><th scope="col">Role</th><th scope="col">Score</th><th scope="col">Filed</th><th scope="col"><span class="sr-only">Open</span></th></tr>
+    </thead>
+    <tbody>
+      {% for e in evaluations %}
+      {% set s = (e.score or 0)|round|int %}
+      <tr>
+        <td class="mono muted" data-label="No.">{{ '%03d'|format(e.id) }}</td>
+        <td data-label="Candidate"><strong>{{ e.candidate.name if e.candidate else '—' }}</strong></td>
+        <td data-label="Role">{{ e.job.title if e.job else '—' }}{% if e.job and e.job.is_custom %} <span class="field-hint">· pasted</span>{% endif %}</td>
+        <td data-label="Score"><span class="score-chip band-{{ score_band(s) }}">{{ s }}</span>{% if e.is_pending %} <span class="field-hint">writing…</span>{% endif %}</td>
+        <td class="mono muted" data-label="Filed">{{ e.created_at|datetime }}</td>
+        <td class="ledger-link"><a href="{{ url_for('report', evaluation_id=e.id) }}">View →</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-box">
+    <p>No reports filed yet.</p>
+    <a href="{{ url_for('analyze_form') }}">Run your first analysis</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

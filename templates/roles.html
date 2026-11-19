@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, section_mark %}
+{% block title %}Roles · Resume Analyzer{% endblock %}
+{% block content %}
+<section class="sheet sheet-wide">
+  {{ section_mark('02', 'Role catalogue') }}
+
+  <h1 class="display display-md">{{ jobs|length }} roles,<br><em>one resume.</em></h1>
+  <p class="lede">Each role has a description and a curated skill list used for scoring. Pick one to analyze your resume against it.</p>
+
+  <div class="segments segments-filter" id="category-filter" role="group" aria-label="Filter roles by category">
+    {% for name, glyph in categories %}
+    <button type="button" class="segment" data-category="{{ name }}" aria-pressed="false">
+      <span class="segment-glyph">{{ glyph }}</span>
+      <span class="segment-label">{{ name }}</span>
+    </button>
+    {% endfor %}
+  </div>
+
+  <div class="role-grid" id="role-grid">
+    {% for j in jobs %}
+    {% set skills = j.skill_names %}
+    <a class="role-card" href="{{ url_for('analyze_form', job=j.id) }}" data-category="{{ j.category }}">
+      <span class="role-title">{{ j.title }}</span>
+      <span class="role-meta">{{ (j.category or 'general')|lower }} · {{ skills|length }} skills</span>
+      <span class="role-skills">{{ skills[:4]|join(' · ') }}{% if skills|length > 4 %} <b>+{{ skills|length - 4 }}</b>{% endif %}</span>
+    </a>
+    {% else %}
+    <div class="empty-box"><p>No roles configured yet.</p></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+{# Line icons (24px grid, stroke = currentColor). #}
+{% macro icon(name, size=16) -%}
+<svg class="icon" viewBox="0 0 24 24" width="{{ size }}" height="{{ size }}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+{%- if name == 'home' -%}
+  <path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>
+{%- elif name == 'upload' -%}
+  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 18v-6M9.5 14.5 12 12l2.5 2.5"/>
+{%- elif name == 'briefcase' -%}
+  <rect x="3" y="7" width="18" height="13" rx="1"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M3 13h18"/>
+{%- elif name == 'pulse' -%}
+  <path d="M3 12h4l2.5-6 4 13 2.5-7H21"/>
+{%- elif name == 'clock' -%}
+  <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+{%- elif name == 'arrow' -%}
+  <path d="M5 12h14M13 6l6 6-6 6"/>
+{%- elif name == 'print' -%}
+  <path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1"/><path d="M6 14h12v7H6z"/>
+{%- elif name == 'file' -%}
+  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>
+{%- endif -%}
+</svg>
+{%- endmacro %}
+
+{# "§ 01 ———————— LABEL" section marker. #}
+{% macro section_mark(number, label) -%}
+<div class="section-mark">
+  <span class="section-num">§ {{ number }}</span>
+  <span class="section-rule" aria-hidden="true"></span>
+  <span class="section-label">{{ label }}</span>
+</div>
+{%- endmacro %}
+
+{# Horizontal scale with a square marker, e.g. a score from 0–100. #}
+{% macro scale(number, label, value, left, right) -%}
+<div class="scale">
+  <div class="scale-head">
+    <span class="field-label"><span class="field-num">{{ number }}</span> {{ label }}</span>
+    <span class="scale-value">{{ value }}</span>
+  </div>
+  <div class="scale-track" role="meter" aria-label="{{ label }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ value }}">
+    <span class="scale-fill" style="width: {{ value }}%"></span>
+    <span class="scale-thumb" style="left: {{ value }}%"></span>
+  </div>
+  <div class="scale-ends"><span>{{ left }}</span><span>{{ right }}</span></div>
+</div>
+{%- endmacro %}

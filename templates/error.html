@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "_macros.html" import section_mark %}
+{% block title %}{{ code }} · Resume Analyzer{% endblock %}
+{% block content %}
+<section class="sheet">
+  {{ section_mark(code, 'Error') }}
+  <h1 class="display display-md">{{ message }}</h1>
+  <div class="empty-box">
+    <a href="{{ url_for('index') }}">Return to the front page</a>
+  </div>
+</section>
+{% endblock %}

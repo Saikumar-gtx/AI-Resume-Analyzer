@@ -1,0 +1,667 @@
+[
+  {
+    "title": "AI Engineer",
+    "category": "Data & AI",
+    "description": "Design, build and deploy production AI systems and machine learning pipelines. Strong Python plus PyTorch or TensorFlow and a solid grasp of transformer architectures. Experience with LLMs, prompt engineering, retrieval-augmented generation (RAG) and vector databases such as FAISS or Pinecone. Familiar with MLOps practices including model versioning, CI/CD for ML and monitoring, and with deploying on AWS, GCP or Azure. Understands data preprocessing, feature engineering and model evaluation metrics.",
+    "skills": [
+      "Python",
+      "PyTorch",
+      "TensorFlow",
+      "Transformers",
+      "LLM|large language model",
+      "Prompt Engineering",
+      "RAG|retrieval-augmented|retrieval augmented",
+      "Vector Database|FAISS|Pinecone|Chroma|Weaviate|Milvus",
+      "MLOps",
+      "Docker",
+      "Cloud (AWS/GCP/Azure)=AWS|GCP|Azure|Google Cloud",
+      "Git"
+    ]
+  },
+  {
+    "title": "Machine Learning Engineer",
+    "category": "Data & AI",
+    "description": "Develop and maintain scalable machine learning models in production. Proficient in Python, scikit-learn, XGBoost, PyTorch and TensorFlow. Builds data pipelines, ETL workflows and feature stores. Strong in supervised and unsupervised learning, hyperparameter tuning and cross-validation. Tracks experiments with MLflow or Weights & Biases, and productionizes models with Docker, Kubernetes and cloud ML platforms alongside data and software engineers.",
+    "skills": [
+      "Python",
+      "scikit-learn|sklearn",
+      "XGBoost|LightGBM",
+      "PyTorch",
+      "TensorFlow|Keras",
+      "SQL",
+      "MLflow|Weights & Biases|wandb",
+      "Docker",
+      "Kubernetes|k8s",
+      "Feature Engineering",
+      "Model Deployment|deployed models|model serving",
+      "Cloud (AWS/GCP/Azure)=AWS|GCP|Azure|Google Cloud"
+    ]
+  },
+  {
+    "title": "Data Scientist",
+    "category": "Data & AI",
+    "description": "Analyze large datasets to extract actionable insights that support business decisions. Proficient in Python, R and SQL with pandas, NumPy and visualization libraries such as Matplotlib and Seaborn. Experienced with statistical modeling, A/B testing, hypothesis testing and regression. Builds and evaluates predictive models with scikit-learn and presents findings to technical and non-technical stakeholders. Spark and BI tools such as Tableau or Power BI are a plus.",
+    "skills": [
+      "Python",
+      "R",
+      "SQL",
+      "pandas",
+      "NumPy",
+      "scikit-learn|sklearn",
+      "Statistics|statistical",
+      "A/B Testing|ab testing|experimentation",
+      "Machine Learning",
+      "Data Visualization|Matplotlib|Seaborn|Plotly",
+      "BI tool=Tableau|Power BI|PowerBI|Looker",
+      "Spark|PySpark"
+    ]
+  },
+  {
+    "title": "Software Engineer",
+    "category": "Software",
+    "description": "Design, develop, test and maintain high-quality software. Strong in one or more of Python, Java, Go or TypeScript. Builds RESTful APIs and microservices backed by relational databases. Works with Git, CI/CD pipelines and Agile practices, and applies design patterns, SOLID principles and clean code. Containerizes services with Docker and Kubernetes, and contributes through code review, debugging and technical documentation.",
+    "skills": [
+      "Programming language=Python|Java|Go|Golang|TypeScript|C++|C#",
+      "Data Structures|Algorithms",
+      "REST|RESTful",
+      "Microservices",
+      "SQL",
+      "Git",
+      "CI/CD|continuous integration",
+      "Unit testing=unit test|unit testing|pytest|JUnit|Jest",
+      "Docker",
+      "Kubernetes|k8s",
+      "Agile|Scrum",
+      "System Design"
+    ]
+  },
+  {
+    "title": "Backend Developer",
+    "category": "Software",
+    "description": "Build and maintain robust, scalable server-side applications and APIs using Python, Node.js or Java with frameworks such as Flask, FastAPI, Django or Spring Boot. Works with SQL and NoSQL databases including PostgreSQL, MySQL, MongoDB and Redis. Designs REST and GraphQL APIs with sound authentication and authorization. Uses message queues such as RabbitMQ or Kafka, deploys to cloud or serverless infrastructure in containers, and writes testable, well-documented code.",
+    "skills": [
+      "Server-side language=Python|Node.js|Java",
+      "Web framework=Flask|FastAPI|Django|Express|Spring Boot",
+      "REST|RESTful",
+      "GraphQL",
+      "SQL database=PostgreSQL|MySQL|SQL Server",
+      "MongoDB|NoSQL",
+      "Redis",
+      "Message queue=Kafka|RabbitMQ|SQS",
+      "Authentication|OAuth|JWT",
+      "Docker",
+      "Cloud (AWS/GCP/Azure)=AWS|GCP|Azure|Google Cloud",
+      "Unit testing=unit test|unit testing|pytest|JUnit|Jest"
+    ]
+  },
+  {
+    "title": "Backend Engineer",
+    "category": "Software",
+    "description": "Design and operate the APIs and services behind a high-traffic financial product. Strong Java with Spring Boot, plus PostgreSQL and REST API design. Builds reliable, secure, well-tested services, uses caching and message queues for scale, and deploys with Docker and CI/CD to cloud infrastructure. Comfortable with observability, performance tuning and on-call ownership of production systems.",
+    "skills": [
+      "Java",
+      "Spring Boot|Spring",
+      "PostgreSQL",
+      "REST|RESTful",
+      "Microservices",
+      "Redis|caching",
+      "Message queue=Kafka|RabbitMQ|SQS",
+      "Docker",
+      "CI/CD",
+      "JUnit|unit testing",
+      "Cloud (AWS/GCP/Azure)=AWS|GCP|Azure|Google Cloud",
+      "Monitoring|Prometheus|Grafana|observability"
+    ]
+  },
+  {
+    "title": "Frontend Developer",
+    "category": "Software",
+    "description": "Build fast, accessible and responsive user interfaces. Strong JavaScript and TypeScript, modern HTML and CSS, and a component framework such as React. Manages state, integrates REST or GraphQL APIs, and works closely with designers using Figma. Writes tests with Jest or Testing Library, cares about web performance and accessibility, and ships through Git-based CI/CD workflows.",
+    "skills": [
+      "JavaScript",
+      "TypeScript",
+      "React|React.js",
+      "HTML",
+      "CSS|Sass|Tailwind",
+      "Redux|state management|Zustand",
+      "REST|GraphQL",
+      "Jest|Testing Library|Cypress",
+      "Accessibility|a11y|WCAG",
+      "Webpack|Vite",
+      "Responsive Design|responsive",
+      "Git"
+    ]
+  },
+  {
+    "title": "Full Stack Developer",
+    "category": "Software",
+    "description": "Deliver features end to end, from database to UI. Builds React frontends and Node.js backends, designs MongoDB or SQL schemas and exposes REST or GraphQL APIs. Handles authentication, deployment with Docker and cloud hosting, and automated testing. Comfortable owning a feature from design discussion through production monitoring.",
+    "skills": [
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Node.js|Express",
+      "MongoDB",
+      "SQL=SQL|PostgreSQL|MySQL",
+      "GraphQL",
+      "REST|RESTful",
+      "HTML",
+      "CSS",
+      "Docker",
+      "Git"
+    ]
+  },
+  {
+    "title": "Mobile Developer",
+    "category": "Software",
+    "description": "Build and ship native or cross-platform mobile apps. Experienced with Kotlin for Android or Swift for iOS, and with Flutter or React Native for cross-platform work. Integrates REST APIs, handles offline storage and push notifications, writes UI and unit tests, and publishes to the App Store and Google Play with CI/CD.",
+    "skills": [
+      "Kotlin",
+      "Swift",
+      "Flutter|Dart",
+      "React Native",
+      "Android",
+      "iOS",
+      "REST|RESTful",
+      "Firebase",
+      "Unit Testing|XCTest|Espresso",
+      "App Store|Google Play|Play Store",
+      "Git",
+      "CI/CD|Fastlane"
+    ]
+  },
+  {
+    "title": "DevOps Engineer",
+    "category": "Infrastructure",
+    "description": "Automate infrastructure and delivery. Manages cloud resources on AWS with Terraform, runs workloads on Kubernetes and Docker, and builds CI/CD pipelines with tools such as GitHub Actions, GitLab CI or Jenkins. Implements monitoring and alerting with Prometheus and Grafana, scripts in Bash or Python, and improves reliability, security and cost of Linux-based systems.",
+    "skills": [
+      "AWS",
+      "Terraform|Infrastructure as Code|IaC",
+      "Kubernetes|k8s",
+      "Docker",
+      "CI/CD",
+      "Jenkins|GitHub Actions|GitLab CI",
+      "Linux",
+      "Bash|shell scripting",
+      "Python",
+      "Prometheus|Grafana|monitoring",
+      "Ansible",
+      "Git"
+    ]
+  },
+  {
+    "title": "Site Reliability Engineer",
+    "category": "Infrastructure",
+    "description": "Keep large distributed systems reliable and fast. Defines SLIs, SLOs and error budgets, builds monitoring, alerting and incident response, and leads blameless postmortems. Automates operations in Python or Go, runs services on Kubernetes, manages infrastructure as code and CI/CD, and does capacity planning and performance tuning on Linux.",
+    "skills": [
+      "Python or Go=Python|Go|Golang",
+      "Kubernetes|k8s",
+      "Linux",
+      "Monitoring|Prometheus|Grafana|Datadog",
+      "SLO|SLI|error budget",
+      "Incident Response|on-call|postmortem",
+      "Terraform|Infrastructure as Code",
+      "CI/CD",
+      "Docker",
+      "Cloud (AWS/GCP/Azure)=AWS|GCP|Azure|Google Cloud",
+      "Distributed Systems",
+      "Bash"
+    ]
+  },
+  {
+    "title": "Cloud Architect",
+    "category": "Infrastructure",
+    "description": "Design secure, scalable and cost-efficient cloud systems across AWS, Azure and GCP. Defines reference architectures, networking, identity and security controls, and migration plans. Uses Terraform for infrastructure as code, Kubernetes and serverless for compute, and guides teams on high availability, disaster recovery and cost optimization.",
+    "skills": [
+      "AWS",
+      "Azure",
+      "GCP|Google Cloud",
+      "Terraform|Infrastructure as Code|CloudFormation",
+      "Kubernetes|k8s",
+      "Serverless|Lambda",
+      "Networking|VPC",
+      "IAM|identity",
+      "Security",
+      "High Availability|disaster recovery",
+      "Cost Optimization",
+      "Solution Architecture|architecture"
+    ]
+  },
+  {
+    "title": "Cloud Security Engineer",
+    "category": "Infrastructure",
+    "description": "Secure cloud platforms and workloads. Hardens AWS accounts and IAM policies, secures Kubernetes clusters, manages encryption and key management, and builds detection and response for cloud environments. Automates security controls as code, runs vulnerability scanning and compliance checks against frameworks such as CIS, SOC 2 or ISO 27001.",
+    "skills": [
+      "AWS Security|AWS",
+      "IAM",
+      "Kubernetes|k8s",
+      "Encryption|KMS",
+      "Terraform|Infrastructure as Code",
+      "SIEM|GuardDuty|Security Hub",
+      "Vulnerability Management|vulnerability scanning",
+      "Compliance|SOC 2|ISO 27001|CIS",
+      "Network Security|firewall",
+      "Python",
+      "Incident Response",
+      "Zero Trust"
+    ]
+  },
+  {
+    "title": "Data Engineer",
+    "category": "Data & AI",
+    "description": "Build and manage reliable ETL and ELT pipelines. Strong Python and SQL, orchestrates workflows with Airflow, and processes large datasets with Spark and Hadoop. Models data in warehouses such as Snowflake, BigQuery or Redshift, works with streaming systems like Kafka, and ensures data quality, lineage and documentation.",
+    "skills": [
+      "Python",
+      "SQL",
+      "Airflow",
+      "Spark|PySpark",
+      "Hadoop",
+      "ETL|ELT",
+      "Kafka",
+      "Snowflake|BigQuery|Redshift|data warehouse",
+      "dbt",
+      "Data Modeling",
+      "Cloud (AWS/GCP/Azure)=AWS|GCP|Azure|Google Cloud",
+      "Docker"
+    ]
+  },
+  {
+    "title": "Big Data Engineer",
+    "category": "Data & AI",
+    "description": "Process very large datasets at scale. Builds batch and streaming pipelines with Hadoop, Spark and Kafka, writes jobs in Scala or Python, and manages distributed storage such as HDFS, Hive or data lakes. Tunes cluster performance and partitions data for efficient querying.",
+    "skills": [
+      "Hadoop",
+      "Spark",
+      "Scala",
+      "Kafka",
+      "Python",
+      "Hive",
+      "HDFS|data lake",
+      "SQL",
+      "Streaming|Flink|Spark Streaming",
+      "Distributed Systems",
+      "Cloud data platform=EMR|Databricks|AWS|GCP|Azure",
+      "Linux"
+    ]
+  },
+  {
+    "title": "Data Visualization Engineer",
+    "category": "Data & AI",
+    "description": "Build dashboards and visual analytics that help teams make decisions. Designs clear dashboards in Tableau or Power BI and custom visualizations with D3.js. Writes SQL and Python to prepare data, applies visual design and storytelling principles, and partners with stakeholders to define metrics.",
+    "skills": [
+      "Tableau",
+      "Power BI|PowerBI",
+      "D3.js|D3",
+      "Python",
+      "SQL",
+      "JavaScript",
+      "Dashboards|dashboard",
+      "Data Storytelling|storytelling",
+      "Excel",
+      "pandas",
+      "KPI|metrics",
+      "UX|user experience"
+    ]
+  },
+  {
+    "title": "Business Analyst",
+    "category": "Product & More",
+    "description": "Analyze business requirements and turn them into clear specifications. Gathers requirements from stakeholders, models processes with UML or BPMN, and analyzes data with SQL, Excel and Power BI. Writes user stories and acceptance criteria, supports Agile delivery and measures outcomes after launch.",
+    "skills": [
+      "SQL",
+      "Excel",
+      "BI tool=Power BI|PowerBI|Tableau|Looker",
+      "UML|BPMN",
+      "Requirements Gathering|requirements",
+      "User Stories",
+      "Stakeholder Management|stakeholders",
+      "Process Modeling|process improvement",
+      "Agile|Scrum",
+      "JIRA|Jira",
+      "Data Analysis",
+      "Documentation"
+    ]
+  },
+  {
+    "title": "Product Manager",
+    "category": "Product & More",
+    "description": "Define product strategy and roadmaps. Discovers customer problems through research and data, prioritizes a backlog, writes clear requirements and works with engineering and design in Agile and Scrum teams using JIRA. Defines success metrics, runs experiments, and communicates with stakeholders across the business.",
+    "skills": [
+      "Product Roadmap|roadmap",
+      "Agile",
+      "Scrum",
+      "JIRA|Jira",
+      "Stakeholder Management|stakeholders",
+      "User Research|customer research",
+      "Prioritization|backlog",
+      "Metrics|KPI|OKR",
+      "A/B Testing|experimentation",
+      "Product Strategy|strategy",
+      "SQL|analytics",
+      "Go-to-Market|launch"
+    ]
+  },
+  {
+    "title": "UI/UX Designer",
+    "category": "Product & More",
+    "description": "Design intuitive, accessible user experiences. Conducts user research and usability testing, creates wireframes, user flows and high-fidelity prototypes in Figma or Sketch, and maintains a design system. Collaborates closely with product and engineering and iterates based on data and feedback.",
+    "skills": [
+      "Figma",
+      "Sketch|Adobe XD",
+      "Wireframing|wireframes",
+      "Prototyping|prototypes",
+      "User Research",
+      "Usability Testing",
+      "Design Systems|design system",
+      "Interaction Design",
+      "Accessibility|WCAG",
+      "Information Architecture",
+      "Visual Design|typography",
+      "Portfolio"
+    ]
+  },
+  {
+    "title": "QA Engineer",
+    "category": "Software",
+    "description": "Automate test suites and protect product quality. Writes UI automation with Selenium or Cypress and unit tests with Jest or pytest, tests REST APIs, and integrates tests into CI/CD. Writes test plans, tracks defects, and performs regression, performance and exploratory testing.",
+    "skills": [
+      "Selenium",
+      "Cypress|Playwright",
+      "Python",
+      "Jest",
+      "pytest",
+      "API Testing|Postman|REST",
+      "Test Automation|automated testing",
+      "Test Plans|test cases",
+      "CI/CD",
+      "Performance Testing|JMeter|load testing",
+      "Regression Testing|regression",
+      "JIRA|bug tracking"
+    ]
+  },
+  {
+    "title": "Cybersecurity Analyst",
+    "category": "Infrastructure",
+    "description": "Monitor, detect and respond to security incidents. Works in a SIEM such as Splunk, triages alerts from IDS/IPS and endpoint tools, analyzes logs and network traffic, and manages firewalls. Comfortable on Linux, performs vulnerability assessments, and follows incident response playbooks aligned to frameworks like MITRE ATT&CK and NIST.",
+    "skills": [
+      "SIEM|Splunk|QRadar|Sentinel",
+      "IDS|IPS|intrusion detection",
+      "Firewalls|firewall",
+      "Linux",
+      "Incident Response",
+      "Vulnerability Assessment|vulnerability",
+      "Network Security|Wireshark",
+      "Threat Intelligence|threat hunting",
+      "MITRE ATT&CK|MITRE",
+      "NIST|ISO 27001",
+      "Scripting=Python|scripting|PowerShell|Bash",
+      "Security certification=Security+|CEH|CySA+|OSCP|CISSP"
+    ]
+  },
+  {
+    "title": "System Administrator",
+    "category": "Infrastructure",
+    "description": "Manage enterprise servers and infrastructure. Administers Linux and Windows Server, Active Directory and core networking (DNS, DHCP). Automates tasks with Bash and PowerShell, manages backups, patching and virtualization, and monitors systems for availability and security.",
+    "skills": [
+      "Linux",
+      "Windows Server",
+      "Networking|TCP/IP",
+      "Bash",
+      "PowerShell",
+      "Active Directory",
+      "DNS|DHCP",
+      "Virtualization|VMware|Hyper-V",
+      "Backup|backups",
+      "Monitoring|Nagios|Zabbix",
+      "Patching|patch management",
+      "Security"
+    ]
+  },
+  {
+    "title": "Network Engineer",
+    "category": "Infrastructure",
+    "description": "Design and manage enterprise networks. Configures Cisco routers, switches and firewalls across LAN and WAN, runs routing protocols such as BGP and OSPF, and manages VPN and VLAN segmentation. Monitors and troubleshoots network performance and documents designs.",
+    "skills": [
+      "Cisco",
+      "LAN",
+      "WAN",
+      "VPN",
+      "Routing|BGP|OSPF",
+      "Switching|VLAN",
+      "Firewalls|firewall",
+      "TCP/IP",
+      "Network Monitoring|monitoring",
+      "CCNA|CCNP",
+      "SD-WAN",
+      "Troubleshooting"
+    ]
+  },
+  {
+    "title": "Database Administrator",
+    "category": "Infrastructure",
+    "description": "Keep databases fast, reliable and secure. Administers MySQL, PostgreSQL and Oracle, tunes queries and indexes, and manages backup, recovery, replication and high availability. Automates routine work with scripting, manages user access, and plans capacity and upgrades.",
+    "skills": [
+      "MySQL",
+      "PostgreSQL",
+      "Oracle",
+      "SQL",
+      "Performance Tuning|query optimization|indexing",
+      "Backup|recovery",
+      "Replication|high availability",
+      "Security|access control",
+      "SQL Server",
+      "Scripting=Bash|Python|scripting|PowerShell",
+      "Monitoring",
+      "Cloud Databases|RDS|Cloud SQL"
+    ]
+  },
+  {
+    "title": "Blockchain Developer",
+    "category": "Software",
+    "description": "Build decentralized applications. Writes and audits smart contracts in Solidity on Ethereum and EVM chains, tests with Hardhat or Foundry, and connects frontends with Web3.js or Ethers.js. Understands gas optimization, token standards such as ERC-20 and ERC-721, and common security pitfalls.",
+    "skills": [
+      "Solidity",
+      "Ethereum|EVM",
+      "Smart Contracts|smart contract",
+      "Web3.js|Ethers.js",
+      "Hardhat|Truffle|Foundry",
+      "JavaScript/TypeScript=JavaScript|TypeScript",
+      "ERC-20|ERC-721|token standards",
+      "DeFi",
+      "Security Audits|audit",
+      "Gas Optimization",
+      "React",
+      "Git"
+    ]
+  },
+  {
+    "title": "AI Prompt Engineer",
+    "category": "Data & AI",
+    "description": "Design, test and evaluate prompts for production AI features. Works with LLMs through APIs, builds evaluation datasets and automated evals, and improves reliability with techniques such as few-shot prompting, structured output and retrieval-augmented generation. Scripts in Python and collaborates with product and engineering teams.",
+    "skills": [
+      "Python",
+      "LLMs|LLM|large language model",
+      "NLP",
+      "Prompt Engineering|prompting",
+      "Evaluation|evals",
+      "RAG|retrieval-augmented",
+      "API|APIs",
+      "LangChain|LlamaIndex",
+      "Few-shot|chain-of-thought",
+      "JSON|structured output",
+      "Data Analysis",
+      "Technical Writing|documentation"
+    ]
+  },
+  {
+    "title": "AI Researcher",
+    "category": "Data & AI",
+    "description": "Research and develop new AI models and methods. Strong mathematics, statistics and deep learning foundations, implements experiments in Python with PyTorch or JAX, and explores areas such as reinforcement learning, NLP or computer vision. Publishes or contributes to research papers and communicates results clearly.",
+    "skills": [
+      "Python",
+      "Deep Learning|neural networks",
+      "PyTorch|JAX|TensorFlow",
+      "Reinforcement Learning|RL",
+      "Mathematics|linear algebra|probability",
+      "Statistics",
+      "NLP|computer vision",
+      "Research|publications|paper",
+      "Experimentation|experiments",
+      "Machine Learning",
+      "Graduate degree=PhD|MSc|M.S.|Master",
+      "GPU|CUDA"
+    ]
+  },
+  {
+    "title": "NLP Engineer",
+    "category": "Data & AI",
+    "description": "Build language and speech models. Develops NLP pipelines in Python with PyTorch and Hugging Face Transformers, fine-tunes models for classification, extraction and speech recognition, and evaluates them with appropriate metrics. Deploys models as services and works with large text and audio datasets.",
+    "skills": [
+      "Python",
+      "PyTorch",
+      "NLP|natural language processing",
+      "Transformers|Hugging Face|BERT",
+      "Speech Recognition|ASR|speech",
+      "Fine-tuning|fine tuning",
+      "spaCy|NLTK",
+      "LLM|large language model",
+      "Text Classification|named entity|NER",
+      "Evaluation Metrics|BLEU|F1",
+      "Docker",
+      "SQL"
+    ]
+  },
+  {
+    "title": "AI Ethics Specialist",
+    "category": "Data & AI",
+    "description": "Ensure AI systems are developed and used responsibly. Defines AI policy and governance processes, assesses models for fairness, bias, privacy and transparency, and aligns practice with regulations such as the EU AI Act. Works with engineering, legal and product teams and communicates risk clearly.",
+    "skills": [
+      "AI Policy|policy",
+      "Ethics|ethical",
+      "Fairness|bias",
+      "Governance",
+      "Risk Assessment|risk",
+      "Privacy|GDPR",
+      "EU AI Act|regulation|compliance",
+      "Explainability|transparency",
+      "Machine Learning",
+      "Stakeholder Engagement|stakeholders",
+      "Research",
+      "Communication|writing"
+    ]
+  },
+  {
+    "title": "Embedded Systems Engineer",
+    "category": "Software",
+    "description": "Develop firmware for IoT and embedded devices. Writes C and C++ for ARM microcontrollers, works with RTOS such as FreeRTOS, and integrates peripherals over SPI, I2C and UART. Debugs hardware with oscilloscopes and JTAG, and optimizes for memory and power.",
+    "skills": [
+      "C",
+      "C++",
+      "ARM|Cortex",
+      "RTOS|FreeRTOS|Zephyr",
+      "Microcontrollers|MCU|STM32|ESP32",
+      "SPI|I2C|UART",
+      "Firmware",
+      "IoT",
+      "Embedded Linux|Yocto",
+      "JTAG|debugging|oscilloscope",
+      "Python",
+      "Git"
+    ]
+  },
+  {
+    "title": "Robotics Engineer",
+    "category": "Product & More",
+    "description": "Develop control and autonomy software for robots. Writes C++ and Python on ROS or ROS 2, integrates sensors such as lidar, cameras and IMUs, and implements localization, path planning and control algorithms. Tests in simulation with Gazebo before deploying to hardware.",
+    "skills": [
+      "C++",
+      "Python",
+      "ROS|ROS2|ROS 2",
+      "Sensors|lidar|IMU",
+      "Path Planning|motion planning",
+      "Control Systems|PID|control theory",
+      "SLAM|localization",
+      "Computer Vision|OpenCV",
+      "Gazebo|simulation",
+      "Kinematics",
+      "Linux",
+      "MATLAB"
+    ]
+  },
+  {
+    "title": "Aerospace Engineer",
+    "category": "Product & More",
+    "description": "Design, analyze and test aircraft, spacecraft and their components. Strong foundation in aerodynamics, propulsion, structural analysis and flight mechanics. Uses CAD tools such as CATIA, SolidWorks or AutoCAD, and simulation tools such as ANSYS or MATLAB. Experienced with systems engineering, requirements analysis and verification and validation, and familiar with avionics, GNC and FAA or EASA standards.",
+    "skills": [
+      "Aerodynamics",
+      "Propulsion",
+      "Structural Analysis|FEA|finite element",
+      "Flight Mechanics|flight dynamics",
+      "CATIA|SolidWorks|AutoCAD",
+      "ANSYS",
+      "MATLAB|Simulink",
+      "CFD",
+      "Systems Engineering",
+      "Avionics|GNC|guidance navigation",
+      "FAA|EASA",
+      "Verification and Validation|V&V|testing"
+    ]
+  },
+  {
+    "title": "Game Developer",
+    "category": "Software",
+    "description": "Develop 3D games. Builds gameplay systems in Unity with C# or Unreal Engine with C++, optimizes rendering and performance, and works with physics, animation and AI systems. Collaborates with designers and artists, uses version control, and ships to PC, console or mobile.",
+    "skills": [
+      "Unity",
+      "Unreal Engine|Unreal",
+      "C#",
+      "C++",
+      "Game Design|gameplay",
+      "3D Math|linear algebra",
+      "Physics",
+      "Shaders|HLSL|GLSL",
+      "Performance Optimization|profiling",
+      "Multiplayer|networking",
+      "Blender|Maya",
+      "Version control=Git|Perforce"
+    ]
+  },
+  {
+    "title": "AR/VR Developer",
+    "category": "Software",
+    "description": "Build immersive AR and VR experiences. Develops in Unity with C# using ARKit, ARCore and OpenXR, targets headsets such as Meta Quest and mobile AR, and optimizes 3D performance and interaction design for comfort and usability.",
+    "skills": [
+      "Unity",
+      "C#",
+      "ARKit",
+      "ARCore",
+      "OpenXR|XR",
+      "Unreal Engine|Unreal",
+      "3D Modeling|Blender",
+      "Meta Quest|Oculus|HoloLens",
+      "Interaction Design|UX",
+      "Shaders",
+      "Performance Optimization",
+      "Spatial Computing|computer vision"
+    ]
+  },
+  {
+    "title": "Technical Writer",
+    "category": "Product & More",
+    "description": "Write clear technical documentation. Produces API references, guides and tutorials in Markdown, publishes with docs-as-code workflows in Git, and maintains knowledge bases in Confluence. Works with engineers to understand products, tests procedures, and edits for clarity and consistency.",
+    "skills": [
+      "Markdown",
+      "Confluence",
+      "API Docs|API documentation|OpenAPI|Swagger",
+      "Git",
+      "Docs as Code|docs-as-code",
+      "Technical Writing",
+      "Editing|style guide",
+      "Information Architecture",
+      "HTML|CSS",
+      "Tutorials|guides",
+      "Diagrams|diagramming",
+      "Programming basics=Python|JavaScript"
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+Flask>=3.0
+Flask-SQLAlchemy>=3.1
+SQLAlchemy>=2.0
+python-dotenv>=1.0
+requests>=2.31
+numpy>=1.26
+pdfminer.six>=20231228
+python-docx>=1.1
+sentence-transformers>=2.7
+faiss-cpu>=1.8
+gunicorn>=22.0; platform_system != "Windows"

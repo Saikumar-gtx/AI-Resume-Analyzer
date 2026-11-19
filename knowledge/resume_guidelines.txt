@@ -1,0 +1,45 @@
+Lead with impact, not duties. Each bullet should say what you did, how you did it, and what changed as a result. "Responsible for the reporting pipeline" is weaker than "Rebuilt the reporting pipeline in Airflow, cutting nightly run time from 6 hours to 40 minutes."
+
+Quantify results wherever you honestly can: percentages, time saved, revenue, cost, latency, error rates, users served, dataset sizes, team size. Approximate numbers ("about 30%") are better than none, as long as they are defensible in an interview.
+
+Start bullets with a strong, specific action verb such as built, designed, led, automated, migrated, optimized, launched, reduced or shipped. Avoid weak openers like "helped with", "worked on" or "involved in".
+
+Tailor the resume to each role. Mirror the exact terminology of the job description for skills you genuinely have (for example "Kubernetes" rather than only "container orchestration"), because applicant tracking systems match on keywords and recruiters skim for them.
+
+Put the most relevant information first. Within each role, order bullets by relevance to the target job. Within the resume, put the section that best proves fit (experience, projects or skills) near the top.
+
+Use a short professional summary of two or three lines at the top that names the target role, your years of experience, your core stack and one standout achievement. Skip generic objectives like "seeking a challenging position".
+
+Keep formatting ATS-friendly: a single column, standard section headings (Summary, Experience, Projects, Skills, Education), common fonts, no text inside images, and no critical content in headers, footers, tables or text boxes. Export to a text-based PDF or DOCX.
+
+Keep length proportional to experience: one page for students and early-career candidates, up to two pages for experienced professionals. Remove outdated, irrelevant or repetitive content before shrinking fonts or margins.
+
+Group the skills section by category, for example Languages, Frameworks, Data, Cloud and DevOps, and Tools. List only skills you can discuss confidently, and make sure the most important ones also appear in context in your experience or project bullets.
+
+For technical roles, show evidence of skills through projects and work: name the technologies used, the scale (requests per second, data volume, number of users) and the outcome. A skill listed only in the skills section carries far less weight than one demonstrated in a bullet.
+
+Projects are especially important for students, career changers and people missing a required skill. Include two to four substantial projects with a one-line description, the stack, your specific contribution and a link to the code or a live demo.
+
+For machine learning and AI roles, describe the problem, the data, the model or approach, how it was evaluated (metrics such as accuracy, F1, AUC, BLEU, latency) and whether it reached production. Mention MLOps practices such as experiment tracking, model versioning, CI/CD and monitoring when you have used them.
+
+For data roles, emphasise the business question answered, the size and source of the data, the tools used (SQL, Python, Spark, dbt, BI tools) and the decision or change that resulted from the analysis.
+
+For software and backend roles, highlight system design and ownership: APIs you designed, services you scaled, reliability or performance improvements, testing and code quality practices, and production incidents you resolved.
+
+For cloud, DevOps and SRE roles, highlight infrastructure as code, CI/CD pipelines, containerisation and orchestration, observability, incident response and measurable improvements in deployment frequency, uptime, recovery time or cost.
+
+For security roles, name the tools and frameworks you used (SIEM, EDR, MITRE ATT&CK, NIST), the types of incidents handled, vulnerabilities found and fixed, and relevant certifications.
+
+For design and product roles, link a portfolio and describe your process: research, problem framing, iteration, collaboration with engineering, and the measurable effect of the shipped work on users or the business.
+
+Show soft skills through evidence rather than adjectives. Instead of "strong communicator", write "presented quarterly model performance to leadership" or "mentored three junior engineers through their first production launches".
+
+Address gaps honestly. If you lack a required skill, consider a focused project, course or certification and list it. Do not claim experience you do not have; interviews will expose it.
+
+Make contact details easy to find: name, email, phone, city or time zone, and links to LinkedIn, GitHub or a portfolio. Use a professional email address and make sure every link works.
+
+Proofread carefully. Spelling mistakes, inconsistent tense, inconsistent date formats and uneven punctuation suggest a lack of attention to detail. Use past tense for previous roles and present tense for your current role.
+
+Education should include degree, institution and graduation year. Early-career candidates can add relevant coursework, GPA if strong, thesis topics, hackathons and awards. Experienced candidates can keep education brief.
+
+Certifications are most valuable when the job description asks for them or when they fill a visible gap, for example cloud certifications for a cloud role. List the issuer and the year, and remove expired or unrelated certifications.

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, section_mark, scale %}
+{% set job_title = evaluation.job.title if evaluation.job else 'Unknown role' %}
+{% block title %}{{ job_title }} fit report · Resume Analyzer{% endblock %}
+{% block content %}
+{% set band = score_band(score) %}
+{% set band_text = {'strong': 'Strong match', 'moderate': 'Partial match', 'low': 'Weak match'}[band] %}
+{% set pending = evaluation.is_pending %}
+{% set listed_only = breakdown.get('listed_only_skills', []) if breakdown else [] %}
+
+<section class="sheet sheet-wide" {% if pending %}data-poll="{{ url_for('report_status', evaluation_id=evaluation.id) }}"{% endif %}>
+  {{ section_mark('03', 'Fit report · No. %03d'|format(evaluation.id)) }}
+
+  <div class="report-head">
+    <h1 class="display display-md">A fit report for<br><em>{{ job_title }}.</em></h1>
+    <div class="report-actions no-print">
+      <button class="btn btn-outline" type="button" data-action="print" {% if pending %}disabled{% endif %}>{{ icon('print') }} Print / PDF</button>
+      <a class="btn btn-primary" href="{{ url_for('analyze_form') }}">{{ icon('upload') }} Analyze Another</a>
+    </div>
+  </div>
+  <p class="meta-line">
+    <span>Candidate · {{ evaluation.candidate.name }}</span>
+    <span>Filed · {{ evaluation.created_at|datetime }}</span>
+    {% if evaluation.job and evaluation.job.is_custom %}<span>Role · pasted job posting</span>{% endif %}
+    {% if source == 'ai' %}<span>Review · AI + RAG</span>{% if model %}<span>Model · {{ model|replace('ollama/', '')|replace('openai/', '') }}{% if model.startswith('ollama/') %} (local Ollama){% else %} (Groq){% endif %}</span>{% endif %}
+    {% elif source == 'rules' %}<span>Review · automated checks</span>{% endif %}
+  </p>
+
+  <div class="report-grid">
+    <div>
+      <h2 class="part-title">I · Verdict</h2>
+      <div class="verdict band-{{ band }}">
+        <div class="verdict-score" role="img" aria-label="Overall score {{ score }} out of 100">
+          <span class="verdict-num">{{ score }}</span><span class="verdict-max">/100</span>
+        </div>
+        <div class="verdict-side">
+          <span class="verdict-band">{{ band_text }}</span>
+          {% if delta is not none %}
+          <a class="delta {% if delta > 0 %}delta-up{% elif delta < 0 %}delta-down{% endif %}" href="{{ url_for('report', evaluation_id=previous.id) }}"
+             title="Compared with report No. {{ '%03d'|format(previous.id) }}">
+            {% if delta > 0 %}▲ +{{ delta }}{% elif delta < 0 %}▼ {{ delta }}{% else %}= 0{% endif %} since last report
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% if pending %}
+      <div class="pending-box" role="status" aria-live="polite">
+        <span class="pending-dot" aria-hidden="true"></span>
+        <div>
+          <p class="pending-title">Writing your feedback…</p>
+          <p class="field-hint" id="pending-note">The score is ready. The AI review usually takes 10–30 seconds, or a few minutes on the local fallback model. This page updates by itself.</p>
+        </div>
+      </div>
+      {% else %}
+      <p class="summary">{{ evaluation.summary }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      <h2 class="part-title">II · Signals</h2>
+      {% if breakdown %}
+        {% if breakdown.get('skill_score') is not none %}{{ scale('2.1', 'Skill coverage', breakdown.skill_score, 'none shown', 'all shown') }}{% endif %}
+        {{ scale('2.2', 'Keyword overlap', breakdown.keyword_score, 'different vocabulary', 'same vocabulary') }}
+        {% if breakdown.get('semantic_score') is not none %}{{ scale('2.3', 'Semantic similarity', breakdown.semantic_score, 'unrelated', 'closely aligned') }}{% endif %}
+      {% else %}
+        {{ scale('2.1', 'Overall', score, 'weak', 'strong') }}
+        <p class="field-hint">This report was saved by an older version, before the per-signal breakdown existed.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if breakdown and (breakdown.matched_skills or breakdown.missing_skills) %}
+  <h2 class="part-title">III · Skills for this role</h2>
+  <div class="grid-2">
+    <div>
+      <p class="field-label"><span class="field-num">3.1</span> Found in resume <span class="field-hint">{{ breakdown.matched_skills|length }}</span></p>
+      <div class="tags">
+        {% for s in breakdown.matched_skills %}
+          {% if s in listed_only %}<span class="tag tag-listed" title="Listed in your skills, but not shown in any experience or project">{{ s }} · listed only</span>
+          {% else %}<span class="tag tag-found">{{ s }}</span>{% endif %}
+        {% else %}<span class="field-hint">none yet</span>{% endfor %}
+      </div>
+      {% if listed_only %}<p class="field-hint tag-note">“Listed only” skills earn partial credit. Show them in an experience or project bullet for full credit.</p>{% endif %}
+    </div>
+    <div>
+      <p class="field-label"><span class="field-num">3.2</span> Missing <span class="field-hint">{{ breakdown.missing_skills|length }}</span></p>
+      <div class="tags">{% for s in breakdown.missing_skills %}<span class="tag tag-missing">{{ s }}</span>{% else %}<span class="field-hint">nothing missing</span>{% endfor %}</div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if not pending %}
+    {% if strengths or gaps %}
+    <div class="grid-2">
+      <div>
+        <h2 class="part-title">IV · Strengths</h2>
+        <ol class="notes">{% for s in strengths %}<li><span class="field-num">4.{{ loop.index }}</span><span>{{ s }}</span></li>{% endfor %}</ol>
+      </div>
+      <div>
+        <h2 class="part-title">V · Gaps</h2>
+        {% if gaps %}
+        <ol class="notes">{% for g in gaps %}<li><span class="field-num">5.{{ loop.index }}</span><span>{{ g }}</span></li>{% endfor %}</ol>
+        {% else %}<p class="field-hint">No major gaps found.</p>{% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <h2 class="part-title">VI · Recommended edits</h2>
+    <ol class="edits">
+      {% for rec in evaluation.recommendation_list %}
+      <li><span class="edit-num">{{ '%02d'|format(loop.index) }}</span><span class="edit-text">{{ rec }}</span></li>
+      {% endfor %}
+    </ol>
+    {% if grounding_removed %}
+    <p class="field-hint grounding-note">Fact check: {{ grounding_removed }} AI statement{{ 's' if grounding_removed != 1 }} that contradicted your resume {{ 'were' if grounding_removed != 1 else 'was' }} removed automatically.</p>
+    {% endif %}
+  {% endif %}
+
+  <form class="danger-row no-print" method="post" action="{{ url_for('delete_report', evaluation_id=evaluation.id) }}" data-confirm="Delete this report and the resume text stored with it? This cannot be undone.">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <span class="field-hint">Reports store the extracted resume text locally.</span>
+    <button class="btn-link" type="submit">Delete this report</button>
+  </form>
+</section>
+{% endblock %}

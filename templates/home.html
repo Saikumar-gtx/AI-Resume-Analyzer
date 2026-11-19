@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, section_mark %}
+{% block content %}
+<section class="sheet">
+  {{ section_mark('00', 'About this instrument') }}
+
+  <h1 class="display">Does your resume<br>fit <em>the role?</em></h1>
+  <p class="lede">
+    Resume Analyzer scores a resume against a target role on <strong>skills</strong>,
+    <strong>keywords</strong> and <strong>semantic similarity</strong>, then uses retrieval-augmented
+    generation to write specific, honest edits{% if not ai_enabled %} (rule-based feedback while no AI key is configured){% endif %}.
+  </p>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">{{ job_count }}</span>
+      <span class="stat-title">Target roles</span>
+      <span class="stat-sub">software · data &amp; ai · infrastructure · product</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3</span>
+      <span class="stat-title">Score signals</span>
+      <span class="stat-sub">skill coverage · keyword overlap · semantic similarity</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5</span>
+      <span class="stat-title">Edits per report</span>
+      <span class="stat-sub">plus strengths and gaps</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">{{ report_count }}</span>
+      <span class="stat-title">Reports filed</span>
+      <span class="stat-sub">{% if history_enabled %}see history{% else %}stored locally{% endif %}</span>
+    </div>
+  </div>
+
+  <div class="cta-row">
+    <a class="btn btn-primary btn-lg" href="{{ url_for('analyze_form') }}">{{ icon('upload', 18) }} Analyze a Resume</a>
+    <a class="btn btn-outline btn-lg" href="{{ url_for('roles') }}">{{ icon('briefcase', 18) }} Browse Roles</a>
+    <span class="cta-note">pdf · docx · txt · parsed in memory</span>
+  </div>
+</section>
+{% endblock %}

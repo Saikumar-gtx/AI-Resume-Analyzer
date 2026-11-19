@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, section_mark %}
+{% block title %}Analyze · Resume Analyzer{% endblock %}
+{% block content %}
+<section class="sheet">
+  {{ section_mark('01', 'Resume intake') }}
+
+  <h1 class="display display-md">Submit the resume<br>to be <em>evaluated.</em></h1>
+  <p class="lede">Pick a role from the catalogue or paste any job posting, then upload a PDF, DOCX or TXT resume. Files are read in memory and never stored.</p>
+
+  <form id="analyze-form" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <h2 class="part-title">I · Target Role</h2>
+
+    <div class="mode-switch" role="radiogroup" aria-label="How to choose the role">
+      <label class="mode-option">
+        <input type="radio" name="mode" value="catalogue" {% if mode != 'custom' %}checked{% endif %}>
+        <span><b>From the catalogue</b><small>{{ jobs|length }} curated roles</small></span>
+      </label>
+      <label class="mode-option">
+        <input type="radio" name="mode" value="custom" {% if mode == 'custom' %}checked{% endif %}>
+        <span><b>Paste a job posting</b><small>any role, any company</small></span>
+      </label>
+    </div>
+
+    <div class="mode-panel" data-mode="catalogue">
+      <div class="field">
+        <span class="field-label">Category <span class="field-hint">filters the role list</span></span>
+        <div class="segments" id="category-filter" role="group" aria-label="Filter roles by category">
+          {% for name, glyph in categories %}
+          <button type="button" class="segment" data-category="{{ name }}" aria-pressed="false">
+            <span class="segment-glyph">{{ glyph }}</span>
+            <span class="segment-label">{{ name }}</span>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="job_id"><span class="field-num">1.1</span> Role</label>
+        <select class="line-input" name="job_id" id="job_id" {% if mode != 'custom' %}required{% endif %} {% if not jobs %}disabled{% endif %}>
+          <option value="" disabled {% if not selected_job %}selected{% endif %}>Select a role…</option>
+          {% for j in jobs %}
+          <option value="{{ j.id }}" data-category="{{ j.category }}" {% if j.id == selected_job %}selected{% endif %}>{{ j.title }}</option>
+          {% endfor %}
+        </select>
+        {% if not jobs %}
+        <p class="field-error">No roles are configured. Add them to <code>data/jobs.json</code> and restart.</p>
+        {% endif %}
+      </div>
+
+      <div class="role-brief" id="job-details" hidden aria-live="polite">
+        <p class="role-desc" id="job-desc"></p>
+        <div class="tags" id="job-skills"></div>
+      </div>
+    </div>
+
+    <div class="mode-panel" data-mode="custom">
+      <div class="field">
+        <label class="field-label" for="custom_title"><span class="field-num">1.1</span> Job title <span class="field-hint">optional</span></label>
+        <input class="line-input" type="text" id="custom_title" name="custom_title" maxlength="120" placeholder="e.g. Junior ML Engineer at Acme">
+      </div>
+      <div class="field">
+        <label class="field-label" for="custom_description"><span class="field-num">1.2</span> Job description</label>
+        <textarea class="box-input" id="custom_description" name="custom_description" rows="9" minlength="{{ min_jd_chars }}" maxlength="20000"
+                  placeholder="Paste the full job posting: responsibilities, requirements, nice-to-haves…" {% if mode == 'custom' %}required{% endif %}></textarea>
+        <p class="field-hint">Skills are detected automatically from the posting and matched against your resume.</p>
+      </div>
+    </div>
+
+    <h2 class="part-title">II · Candidate</h2>
+
+    <div class="grid-2">
+      <div class="field">
+        <label class="field-label" for="candidate_name"><span class="field-num">2.1</span> Name <span class="field-hint">optional</span></label>
+        <input class="line-input" type="text" id="candidate_name" name="candidate_name" maxlength="120" autocomplete="name" placeholder="e.g. Priya Sharma">
+      </div>
+
+      <div class="field">
+        <span class="field-label" id="resume-label"><span class="field-num">2.2</span> Resume file</span>
+        <label class="dropzone" id="dropzone" for="resume">
+          <input type="file" id="resume" name="resume" accept=".pdf,.docx,.txt" required
+                 aria-labelledby="resume-label" data-max-mb="{{ max_upload_mb }}">
+          {{ icon('file', 20) }}
+          <span class="dropzone-text">
+            <span class="dropzone-title" id="file-name">Drop a file or <u>browse</u></span>
+            <span class="dropzone-hint">pdf · docx · txt · ≤ {{ max_upload_mb }} mb</span>
+          </span>
+        </label>
+        <p class="field-error" id="file-error" hidden></p>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <span class="cta-note" id="progress-note">{% if ai_enabled %}score is instant · ai feedback follows on the report{% else %}rule-based review · no ai model configured{% endif %}</span>
+      <button class="btn btn-primary btn-lg" type="submit" id="submit-btn" {% if not jobs %}disabled{% endif %}>
+        <span class="spinner" aria-hidden="true"></span>{{ icon('arrow', 18) }}<span class="btn-label">Run Analysis</span>
+      </button>
+    </div>
+  </form>
+</section>
+
+<script id="jobs-data" type="application/json">{{ jobs_data|tojson }}</script>
+{% endblock %}
