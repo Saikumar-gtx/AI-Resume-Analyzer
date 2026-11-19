@@ -30,13 +30,14 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 from config import Config
 from models import STATUS_DONE, STATUS_PENDING, Candidate, Evaluation, Job, db, upgrade_schema, utcnow
+from services.analysis import analyze_resume, rank_roles
 from services.embeddings import Embedder
 from services.jobs import catalogue_jobs, create_custom_job, skill_vocabulary, sync_jobs
 from services.llm import GroqClient, LLMChain, OllamaClient
-from services.maintenance import delete_evaluation, purge_older_than
+from services.maintenance import delete_evaluation, purge_older_than, purge_orphans
 from services.rag import KnowledgeBase
 from services.resume_parser import ResumeParseError, extract_contact, extract_text, file_extension
-from services.scoring import score_band, score_resume
+from services.scoring import score_band
 from services.worker import FeedbackWorker, RateLimiter, cache_key
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -62,6 +63,7 @@ def create_app(overrides: dict | None = None) -> Flask:
         upgrade_schema()
         sync_jobs(app.config["JOBS_SEED_FILE"])
         purge_older_than(app.config["RETENTION_DAYS"])
+        purge_orphans()
         logger.info("%d roles available.", catalogue_jobs().count())
 
     embedder = Embedder(app.config["EMBED_MODEL_NAME"], enabled=app.config["ENABLE_EMBEDDINGS"])
@@ -226,68 +228,62 @@ def _register_routes(app: Flask) -> None:
                 return redirect(url_for("analyze_form"))
 
         # --- resume ---
-        upload = request.files.get("resume")
-        if upload is None or not upload.filename:
-            flash("Please choose a resume file to upload.", "error")
+        resume_text, error = _read_resume_upload(app)
+        if error:
+            flash(error, "error")
             return retry
-        ext = file_extension(upload.filename)
-        if ext not in app.config["ALLOWED_EXTENSIONS"]:
-            flash("Unsupported file type. Upload a PDF, DOCX or TXT resume.", "error")
-            return retry
-        try:
-            resume_text = extract_text(upload.stream, ext)
-        except ResumeParseError as exc:
-            flash(str(exc), "error")
-            return retry
-
         if not services["limiter"].allow(request.remote_addr or "unknown"):
             flash("You have run a lot of analyses in a short time. Please wait a few minutes.", "error")
             return retry
 
         if job is None:
             job = create_custom_job(custom_title, custom_description)
-
-        # --- identical submission? reuse the saved report ---
-        key = cache_key(resume_text, job.title, job.description, job.skills)
-        cached = _cached_report(app, key)
-        if cached is not None:
-            db.session.rollback()  # discard a just-created custom job
-            _remember_report(cached.id)
-            flash("You already analyzed this resume for this role, so here is that report.", "notice")
-            return redirect(url_for("report", evaluation_id=cached.id))
-
-        # --- score now (fast), write feedback in the background (slow) ---
-        similarity = None
-        if services["embedder"].enabled:
-            similarity = services["embedder"].resume_job_similarity(resume_text, f"{job.title}. {job.description}")
-        breakdown = score_resume(resume_text, job.description, job.skills, similarity)
-
-        contact = extract_contact(resume_text)
-        candidate = Candidate(
-            name=" ".join(request.form.get("candidate_name", "").split())[:120] or "Candidate",
-            email=contact["email"],
-            phone=contact["phone"],
-            resume_text=resume_text,
-            skills_text=";".join(breakdown.matched_skills),
-        )
-        evaluation = Evaluation(
-            candidate=candidate,
-            job=job,
-            score=breakdown.overall,
-            summary="",
-            recommendations="",
-            details=json.dumps({"breakdown": breakdown.to_dict()}),
-            status=STATUS_PENDING,
-            cache_key=key,
-        )
-        db.session.add_all([candidate, evaluation])
-        db.session.commit()
-        logger.info("Evaluation %d: %s vs %s -> %d", evaluation.id, candidate.name, job.title, breakdown.overall)
-
-        services["worker"].submit(evaluation.id)
-        _remember_report(evaluation.id)
+        candidate = _new_candidate(resume_text, request.form.get("candidate_name", ""))
+        evaluation_id = _start_evaluation(app, services, candidate, job)
         # Post/Redirect/Get so refreshing the report doesn't re-submit the upload.
-        return redirect(url_for("report", evaluation_id=evaluation.id))
+        return redirect(url_for("report", evaluation_id=evaluation_id))
+
+    # --- Best-fit roles: upload once, rank against the whole catalogue ---------
+
+    @app.post("/match")
+    def match_upload():
+        if app.config["CSRF_ENABLED"] and not _csrf_valid():
+            flash("Your session expired. Please try again.", "error")
+            return redirect(url_for("roles"))
+        resume_text, error = _read_resume_upload(app)
+        if error:
+            flash(error, "error")
+            return redirect(url_for("roles"))
+        if not services["limiter"].allow(request.remote_addr or "unknown"):
+            flash("You have run a lot of analyses in a short time. Please wait a few minutes.", "error")
+            return redirect(url_for("roles"))
+        candidate = _new_candidate(resume_text, request.form.get("candidate_name", ""))
+        db.session.add(candidate)
+        db.session.commit()
+        mine = [c for c in session.get("my_candidates", []) if c != candidate.id]
+        session["my_candidates"] = [candidate.id, *mine][:20]
+        return redirect(url_for("match_results", candidate_id=candidate.id))
+
+    @app.get("/match/<int:candidate_id>")
+    def match_results(candidate_id: int):
+        candidate = _my_candidate(candidate_id)
+        jobs = catalogue_jobs().order_by(Job.title.asc()).all()
+        ranked = rank_roles(candidate.resume_text or "", jobs, services["embedder"])
+        return render_template("match.html", candidate=candidate, ranked=ranked)
+
+    @app.post("/match/<int:candidate_id>/report")
+    def match_report(candidate_id: int):
+        if app.config["CSRF_ENABLED"] and not _csrf_valid():
+            flash("Your session expired. Please try again.", "error")
+            return redirect(url_for("match_results", candidate_id=candidate_id))
+        candidate = _my_candidate(candidate_id)
+        job = _get_job(request.form.get("job_id"))
+        if job is None or job.is_custom:
+            abort(404)
+        if not services["limiter"].allow(request.remote_addr or "unknown"):
+            flash("You have run a lot of analyses in a short time. Please wait a few minutes.", "error")
+            return redirect(url_for("match_results", candidate_id=candidate_id))
+        return redirect(url_for("report", evaluation_id=_start_evaluation(app, services, candidate, job)))
 
     @app.get("/report/<int:evaluation_id>")
     def report(evaluation_id: int):
@@ -352,6 +348,70 @@ def _get_job(raw_id: str | None) -> Job | None:
         return db.session.get(Job, int(raw_id or ""))
     except (TypeError, ValueError):
         return None
+
+
+def _read_resume_upload(app: Flask) -> tuple[str, str | None]:
+    """``(resume_text, error_message)`` for the uploaded ``resume`` file."""
+    upload = request.files.get("resume")
+    if upload is None or not upload.filename:
+        return "", "Please choose a resume file to upload."
+    ext = file_extension(upload.filename)
+    if ext not in app.config["ALLOWED_EXTENSIONS"]:
+        return "", "Unsupported file type. Upload a PDF, DOCX or TXT resume."
+    try:
+        return extract_text(upload.stream, ext), None
+    except ResumeParseError as exc:
+        return "", str(exc)
+
+
+def _new_candidate(resume_text: str, raw_name: str) -> Candidate:
+    contact = extract_contact(resume_text)
+    return Candidate(
+        name=" ".join(raw_name.split())[:120] or "Candidate",
+        email=contact["email"],
+        phone=contact["phone"],
+        resume_text=resume_text,
+    )
+
+
+def _my_candidate(candidate_id: int) -> Candidate:
+    """A candidate uploaded in this browser session (resume text is private)."""
+    candidate = db.session.get(Candidate, candidate_id)
+    if candidate is None or candidate_id not in session.get("my_candidates", []):
+        abort(404)
+    return candidate
+
+
+def _start_evaluation(app: Flask, services: dict, candidate: Candidate, job: Job) -> int:
+    """Score now, queue the AI feedback, and return the report id (or a cached one)."""
+    resume_text = candidate.resume_text or ""
+    key = cache_key(resume_text, job.title, job.description, job.skills)
+    cached = _cached_report(app, key)
+    if cached is not None:
+        if candidate.id is None:
+            db.session.rollback()  # discard the unsaved candidate / pasted job
+        _remember_report(cached.id)
+        flash("You already analyzed this resume for this role, so here is that report.", "notice")
+        return cached.id
+
+    breakdown = analyze_resume(resume_text, job, services["embedder"])
+    candidate.skills_text = ";".join(breakdown.matched_skills)
+    evaluation = Evaluation(
+        candidate=candidate,
+        job=job,
+        score=breakdown.overall,
+        summary="",
+        recommendations="",
+        details=json.dumps({"breakdown": breakdown.to_dict()}),
+        status=STATUS_PENDING,
+        cache_key=key,
+    )
+    db.session.add_all([candidate, evaluation])
+    db.session.commit()
+    logger.info("Evaluation %d: %s vs %s -> %d", evaluation.id, candidate.name, job.title, breakdown.overall)
+    services["worker"].submit(evaluation.id)
+    _remember_report(evaluation.id)
+    return evaluation.id
 
 
 def _remember_report(evaluation_id: int) -> None:

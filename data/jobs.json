@@ -84,7 +84,7 @@
       "Web framework=Flask|FastAPI|Django|Express|Spring Boot",
       "REST|RESTful",
       "GraphQL",
-      "SQL database=PostgreSQL|MySQL|SQL Server",
+      "SQL database=PostgreSQL|MySQL|SQL Server|SQLite",
       "MongoDB|NoSQL",
       "Redis",
       "Message queue=Kafka|RabbitMQ|SQS",

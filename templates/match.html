@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, section_mark %}
+{% block title %}Best-fit roles · Resume Analyzer{% endblock %}
+{% block content %}
+{% set best_job, best = ranked[0] if ranked else (none, none) %}
+<section class="sheet sheet-wide">
+  {{ section_mark('02', 'Best-fit ranking') }}
+
+  <div class="report-head">
+    <h1 class="display display-md">Where your resume<br><em>fits best.</em></h1>
+    <a class="btn btn-outline no-print" href="{{ url_for('roles') }}">{{ icon('upload') }} Rank Another</a>
+  </div>
+  <p class="meta-line">
+    <span>Candidate · {{ candidate.name }}</span>
+    <span>{{ ranked|length }} roles scored</span>
+    {% if best %}<span>Best fit · {{ best_job.title }} ({{ best.overall }})</span>{% endif %}
+  </p>
+  <p class="lede lede-sm">Scores use the same formula as a full report. Open any role for AI-written strengths, gaps and edits; your resume is already uploaded.</p>
+
+  <div class="segments segments-filter" id="category-filter" role="group" aria-label="Filter roles by category">
+    {% for name, glyph in categories %}
+    <button type="button" class="segment" data-category="{{ name }}" aria-pressed="false">
+      <span class="segment-glyph">{{ glyph }}</span>
+      <span class="segment-label">{{ name }}</span>
+    </button>
+    {% endfor %}
+  </div>
+
+  <ol class="rank-list" id="role-grid">
+    {% for job, b in ranked %}
+    {% set band = score_band(b.overall) %}
+    <li class="rank-row role-card-like" data-category="{{ job.category }}">
+      <span class="rank-num">{{ '%02d'|format(loop.index) }}</span>
+      <div class="rank-main">
+        <span class="role-title">{{ job.title }}</span>
+        <span class="role-meta">{{ (job.category or 'general')|lower }} · {{ b.matched_skills|length }} of {{ b.matched_skills|length + b.related_evidence|length + b.missing_skills|length }} skills shown{% if b.related_evidence %} · {{ b.related_evidence|length }} related{% endif %}</span>
+        <div class="rank-bar" aria-hidden="true"><span class="band-{{ band }}" style="width: {{ b.overall }}%"></span></div>
+        {% if b.missing_skills %}<span class="role-skills">missing · {{ b.missing_skills[:4]|join(' · ') }}{% if b.missing_skills|length > 4 %} <b>+{{ b.missing_skills|length - 4 }}</b>{% endif %}</span>{% endif %}
+      </div>
+      <span class="score-chip band-{{ band }}">{{ b.overall }}</span>
+      <form method="post" action="{{ url_for('match_report', candidate_id=candidate.id) }}" class="rank-action no-print">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="job_id" value="{{ job.id }}">
+        <button class="btn-link" type="submit">Full report →</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endblock %}

@@ -5,7 +5,8 @@ The overall score blends up to three signals:
 
 * **Skill coverage** – share of the job's curated skills found in the resume. A skill
   used in experience/projects counts fully; one that only appears in the skills
-  list counts ``LISTED_ONLY_CREDIT``.
+  list counts ``LISTED_ONLY_CREDIT``; one only *described* (e.g. "Helm charts on
+  EKS" for Kubernetes, see services/concepts.py) counts ``RELATED_CREDIT``.
 * **Keyword coverage** – share of the job description's most frequent terms found.
 * **Semantic similarity** – embedding similarity between resume and job description
   (optional; skipped when the embedding model is unavailable).
@@ -18,11 +19,16 @@ from collections import Counter
 from dataclasses import asdict, dataclass, field
 from functools import lru_cache
 
+from services.concepts import concepts_for
 from services.sections import evidence_text, split_sections
 
 WEIGHTS = {"skills": 0.5, "keywords": 0.2, "semantic": 0.3}
 
+# Bump when scoring changes, so cached reports from older logic are not reused.
+SCORING_VERSION = "2"
+
 LISTED_ONLY_CREDIT = 0.6
+RELATED_CREDIT = 0.5
 
 # Cosine similarities from all-MiniLM-L6-v2 for resume/job pairs: unrelated pairs
 # sit near 0.05–0.15, decent matches around 0.45–0.6 and near-identical text
@@ -72,6 +78,8 @@ class ScoreBreakdown:
     missing_skills: list[str] = field(default_factory=list)
     # Subset of matched_skills found only in the skills list, not in experience/projects.
     listed_only_skills: list[str] = field(default_factory=list)
+    # Not named, but described: skill -> the phrase that was found (e.g. "Kubernetes" -> "helm").
+    related_evidence: dict[str, str] = field(default_factory=dict)
     matched_keywords: list[str] = field(default_factory=list)
     missing_keywords: list[str] = field(default_factory=list)
 
@@ -123,6 +131,18 @@ def _alias_pattern(alias: str) -> re.Pattern[str]:
     escaped = re.escape(base).replace(r"\ ", r"[\s\-]+")
     # Don't let "c" match inside "c++"/"c#", or "java" inside "javascript".
     return re.compile(rf"(?<![a-z0-9]){escaped}{plural}(?![a-z0-9+#])")
+
+
+def find_related(text: str, skills: list[Skill]) -> dict[str, str]:
+    """Skills the text describes without naming: ``{skill name: phrase found}``."""
+    lowered = text.lower()
+    related: dict[str, str] = {}
+    for skill in skills:
+        for phrase in concepts_for(skill.name, skill.aliases):
+            if _alias_pattern(phrase).search(lowered):
+                related[skill.name] = phrase
+                break
+    return related
 
 
 def match_skills(text: str, skills: list[Skill]) -> tuple[list[str], list[str]]:
@@ -195,8 +215,14 @@ def score_resume(
     if sections and "skills" in sections:
         demonstrated, _ = match_skills(evidence_text(sections), skills)
         listed_only = [s for s in matched_skills if s not in demonstrated]
+    related = find_related(resume_text, [s for s in skills if s.name in missing_skills])
+    missing_skills = [s for s in missing_skills if s not in related]
     if skills:
-        credit = len(matched_skills) - len(listed_only) + LISTED_ONLY_CREDIT * len(listed_only)
+        credit = (
+            len(matched_skills) - len(listed_only)
+            + LISTED_ONLY_CREDIT * len(listed_only)
+            + RELATED_CREDIT * len(related)
+        )
         components["skills"] = credit / len(skills)
 
     keywords = extract_keywords(job_description)
@@ -220,6 +246,7 @@ def score_resume(
         matched_skills=matched_skills,
         missing_skills=missing_skills,
         listed_only_skills=listed_only,
+        related_evidence=related,
         matched_keywords=matched_kw,
         missing_keywords=missing_kw,
     )

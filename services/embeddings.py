@@ -68,12 +68,18 @@ class Embedder:
         The model only reads ~256 tokens per input, so the resume is chunked and
         the mean of the three best-matching chunks is used.
         """
+        sims = self.resume_job_similarities(resume_text, [job_text])
+        return sims[0] if sims else None
+
+    def resume_job_similarities(self, resume_text: str, job_texts: list[str]) -> list[float] | None:
+        """Like ``resume_job_similarity`` for many jobs, embedding the resume only once."""
         chunks = chunk_text(resume_text, max_chars=700)[:60]
-        if not chunks:
+        if not chunks or not job_texts:
             return None
-        vectors = self.encode([job_text, *chunks])
+        vectors = self.encode([*job_texts, *chunks])
         if vectors is None:
             return None
-        sims = vectors[1:] @ vectors[0]
-        top = np.sort(sims)[::-1][:3]
-        return float(top.mean())
+        jobs, resume = vectors[: len(job_texts)], vectors[len(job_texts):]
+        sims = resume @ jobs.T  # (chunks, jobs)
+        top = np.sort(sims, axis=0)[::-1][:3]
+        return [float(v) for v in top.mean(axis=0)]

@@ -153,7 +153,7 @@
   function initRoleGrid() {
     const grid = document.getElementById("role-grid");
     if (!grid) return;
-    const cards = Array.from(grid.querySelectorAll(".role-card"));
+    const cards = Array.from(grid.querySelectorAll(":scope > [data-category]"));
     initSegments((category) => {
       cards.forEach((card) => {
         card.hidden = Boolean(category) && card.dataset.category !== category;
@@ -212,6 +212,34 @@
     setTimeout(check, delay);
   }
 
+  /* -------------------------------------------------------------------------
+     Simple upload forms (best-fit ranking): show file name, loading state
+     ----------------------------------------------------------------------- */
+  function initUploadForms() {
+    document.querySelectorAll("form[data-upload-form]").forEach((form) => {
+      const input = form.querySelector('input[type="file"]');
+      const label = form.querySelector("[data-file-name]");
+      const zone = form.querySelector(".dropzone");
+      const button = form.querySelector('button[type="submit"]');
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        zone.classList.toggle("has-file", Boolean(file));
+        if (file) label.textContent = file.name;
+      });
+      form.addEventListener("submit", () => {
+        button.disabled = true;
+        button.classList.add("is-loading");
+        button.querySelector(".btn-label").textContent = "Ranking…";
+      });
+      window.addEventListener("pageshow", (e) => {
+        if (!e.persisted) return;
+        button.disabled = false;
+        button.classList.remove("is-loading");
+        button.querySelector(".btn-label").textContent = "Rank Roles";
+      });
+    });
+  }
+
   function initActions() {
     document.querySelectorAll('[data-action="print"]').forEach((btn) =>
       btn.addEventListener("click", () => window.print())
@@ -226,6 +254,7 @@
   initModeSwitch();
   initAnalyzeForm();
   initRoleGrid();
+  initUploadForms();
   initPolling();
   initActions();
 })();

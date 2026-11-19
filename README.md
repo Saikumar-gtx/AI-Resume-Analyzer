@@ -7,15 +7,16 @@ The app also works **without an API key or ML model**. It falls back to rule-bas
 ## Features
 
 - **Any target role**: pick one of 35 curated roles, or **paste any job posting**. Its skills are detected automatically from a vocabulary of several hundred tools and technologies.
+- **Best-fit roles**: upload once on the Roles page and get your resume ranked against all 35 roles, with missing skills per role. It's instant with no AI call, and any row opens a full report without re-uploading.
 - **PDF, DOCX and TXT uploads**, parsed in memory. DOCX tables are included and scanned/empty PDFs are detected.
 - **Section-aware, explainable score**:
   | Component | Weight | What it measures |
   |---|---|---|
-  | Skill coverage | 50% | Share of the role's skills in the resume. A skill **used** in experience/projects counts fully; one that only appears in the skills list ("listed only") counts 60% |
+  | Skill coverage | 50% | Share of the role's skills in the resume. A skill **used** in experience/projects counts fully; one only in the skills list ("listed only") counts 60%; one **described but not named** ("Helm charts on EKS" for Kubernetes) counts 50% |
   | Keyword overlap | 20% | Share of the job description's most frequent meaningful terms found |
   | Semantic similarity | 30% | Embedding similarity (`all-MiniLM-L6-v2`) between resume chunks and the job description |
 
-  If a component is unavailable, the remaining weights are rescaled.
+  If a component is unavailable, the remaining weights are rescaled. "Described, not named" evidence comes from a curated phrase list (`services/concepts.py`). Embedding similarity was tested for this and rejected: with both MiniLM and bge-m3, true and false skill/bullet pairs overlapped, so it would have handed out false credit.
 - **Instant score, background feedback**: the score appears right away while the AI review is written in the background. The report page updates by itself, so slow local models never block or time out a request.
 - **RAG feedback**: relevant tips are retrieved from `knowledge/resume_guidelines.txt` with FAISS and passed to the LLM with the resume, the role and the found/missing/listed-only skills.
 - **Fallback chain**: Groq primary model → Groq fallback model → **local Ollama** (Mistral 7B by default) → rule-based checks. Each report shows which model wrote it.
@@ -34,6 +35,8 @@ models.py              SQLAlchemy models (+ in-place column upgrades)
 services/
   resume_parser.py     PDF/DOCX/TXT text extraction, contact details
   sections.py          Detect resume sections (experience, projects, skills, ...)
+  concepts.py          Phrases that show a skill without naming it
+  analysis.py          Score one role, or rank all roles in one pass
   scoring.py           Skill/keyword matching, evidence weighting, pasted-job skills
   embeddings.py        Lazy SentenceTransformer wrapper (local cache first)
   rag.py               Knowledge base + FAISS index with on-disk cache

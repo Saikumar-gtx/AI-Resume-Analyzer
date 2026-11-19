@@ -60,6 +60,7 @@ def build_prompt(
     matched = ", ".join(breakdown.matched_skills) or "none"
     missing = ", ".join(breakdown.missing_skills) or "none"
     listed_only = ", ".join(breakdown.listed_only_skills) or "none"
+    related = ", ".join(f"{k} (resume says '{v}')" for k, v in breakdown.related_evidence.items()) or "none"
     return f"""Evaluate this resume for the role below.
 
 ## Role
@@ -72,6 +73,7 @@ Overall match score: {breakdown.overall}/100
 Required skills found in resume: {matched}
 Required skills NOT found in resume: {missing}
 Skills only listed, never shown in experience or projects: {listed_only}
+Skills described but never named (tell the candidate to use the exact term): {related}
 
 ## Resume-writing guidance (use where relevant)
 {context}
@@ -198,6 +200,12 @@ def rule_based_feedback(resume_text: str, job_title: str, breakdown: ScoreBreakd
         recs.append(
             f"If you have experience with {top_missing}, add it with concrete examples; "
             "if not, consider a short project that demonstrates it."
+        )
+    if breakdown.related_evidence:
+        pairs = list(breakdown.related_evidence.items())[:3]
+        examples = "; ".join(f"{skill} (you wrote “{phrase}”)" for skill, phrase in pairs)
+        recs.append(
+            f"Name the skills you already describe so ATS keyword filters find them: {examples}."
         )
     if breakdown.listed_only_skills:
         listed = ", ".join(breakdown.listed_only_skills[:4])

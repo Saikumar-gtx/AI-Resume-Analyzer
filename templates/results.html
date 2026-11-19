@@ -7,6 +7,7 @@
 {% set band_text = {'strong': 'Strong match', 'moderate': 'Partial match', 'low': 'Weak match'}[band] %}
 {% set pending = evaluation.is_pending %}
 {% set listed_only = breakdown.get('listed_only_skills', []) if breakdown else [] %}
+{% set related = breakdown.get('related_evidence', {}) if breakdown else {} %}
 
 <section class="sheet sheet-wide" {% if pending %}data-poll="{{ url_for('report_status', evaluation_id=evaluation.id) }}"{% endif %}>
   {{ section_mark('03', 'Fit report · No. %03d'|format(evaluation.id)) }}
@@ -69,7 +70,7 @@
     </div>
   </div>
 
-  {% if breakdown and (breakdown.matched_skills or breakdown.missing_skills) %}
+  {% if breakdown and (breakdown.matched_skills or breakdown.missing_skills or related) %}
   <h2 class="part-title">III · Skills for this role</h2>
   <div class="grid-2">
     <div>
@@ -83,7 +84,12 @@
       {% if listed_only %}<p class="field-hint tag-note">“Listed only” skills earn partial credit. Show them in an experience or project bullet for full credit.</p>{% endif %}
     </div>
     <div>
-      <p class="field-label"><span class="field-num">3.2</span> Missing <span class="field-hint">{{ breakdown.missing_skills|length }}</span></p>
+      {% if related %}
+      <p class="field-label"><span class="field-num">3.2</span> Described, not named <span class="field-hint">{{ related|length }}</span></p>
+      <div class="tags">{% for s, phrase in related.items() %}<span class="tag tag-related" title="Your resume mentions “{{ phrase }}”">{{ s }} ≈ “{{ phrase }}”</span>{% endfor %}</div>
+      <p class="field-hint tag-note">Half credit: the work is there, but applicant-tracking systems search for the exact skill name. Add it to the relevant bullet.</p>
+      {% endif %}
+      <p class="field-label {% if related %}field-label-spaced{% endif %}"><span class="field-num">{{ '3.3' if related else '3.2' }}</span> Missing <span class="field-hint">{{ breakdown.missing_skills|length }}</span></p>
       <div class="tags">{% for s in breakdown.missing_skills %}<span class="tag tag-missing">{{ s }}</span>{% else %}<span class="field-hint">nothing missing</span>{% endfor %}</div>
     </div>
   </div>

@@ -6,7 +6,24 @@
   {{ section_mark('02', 'Role catalogue') }}
 
   <h1 class="display display-md">{{ jobs|length }} roles,<br><em>one resume.</em></h1>
-  <p class="lede">Each role has a description and a curated skill list used for scoring. Pick one to analyze your resume against it.</p>
+  <p class="lede">Each role has a description and a curated skill list used for scoring. Pick one to analyze your resume against it, or let the instrument rank all of them for you.</p>
+
+  <form class="match-form" action="{{ url_for('match_upload') }}" method="post" enctype="multipart/form-data" data-upload-form>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="match-form-copy">
+      <h2 class="part-title part-title-flush">Find your best-fit roles</h2>
+      <p class="field-hint">Upload once and see how your resume scores against all {{ jobs|length }} roles, best first. Instant, no AI call.</p>
+    </div>
+    <label class="dropzone dropzone-compact" for="match-resume">
+      <input type="file" id="match-resume" name="resume" accept=".pdf,.docx,.txt" required aria-label="Resume file">
+      {{ icon('file', 20) }}
+      <span class="dropzone-text">
+        <span class="dropzone-title" data-file-name>Drop a resume or <u>browse</u></span>
+        <span class="dropzone-hint">pdf · docx · txt</span>
+      </span>
+    </label>
+    <button class="btn btn-primary" type="submit"><span class="spinner" aria-hidden="true"></span>{{ icon('arrow', 16) }}<span class="btn-label">Rank Roles</span></button>
+  </form>
 
   <div class="segments segments-filter" id="category-filter" role="group" aria-label="Filter roles by category">
     {% for name, glyph in categories %}

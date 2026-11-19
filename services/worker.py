@@ -12,7 +12,7 @@ from concurrent.futures import Future, ThreadPoolExecutor
 
 from models import STATUS_DONE, Evaluation, db
 from services.advisor import Feedback, generate_feedback, rule_based_feedback
-from services.scoring import ScoreBreakdown
+from services.scoring import SCORING_VERSION, ScoreBreakdown
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 def cache_key(resume_text: str, job_title: str, job_description: str, job_skills: str | None) -> str:
     """Stable hash of everything that determines a report's content."""
     normalized = " ".join(resume_text.lower().split())
-    payload = "\x1f".join([normalized, job_title, " ".join(job_description.split()), job_skills or ""])
+    payload = "\x1f".join(
+        [SCORING_VERSION, normalized, job_title, " ".join(job_description.split()), job_skills or ""]
+    )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 

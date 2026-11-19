@@ -22,6 +22,25 @@ def delete_evaluation(evaluation: Evaluation) -> None:
     db.session.commit()
 
 
+def purge_orphans(max_age_hours: int = 24) -> int:
+    """
+    Delete resumes and pasted jobs no report uses, once they are older than
+    ``max_age_hours`` (e.g. uploads for the best-fit ranking that never became
+    a report). Returns the number of resumes removed.
+    """
+    cutoff = utcnow() - timedelta(hours=max_age_hours)
+    used_candidates = db.session.query(Evaluation.candidate_id)
+    removed = Candidate.query.filter(
+        ~Candidate.id.in_(used_candidates), Candidate.created_at < cutoff
+    ).delete(synchronize_session=False)
+    used_jobs = db.session.query(Evaluation.job_id).filter(Evaluation.job_id.isnot(None))
+    Job.query.filter(Job.is_custom.is_(True), ~Job.id.in_(used_jobs)).delete(synchronize_session=False)
+    db.session.commit()
+    if removed:
+        logger.info("Removed %d unused uploaded resume(s).", removed)
+    return removed
+
+
 def purge_older_than(days: int) -> int:
     """Delete reports older than ``days`` days. Returns how many were removed."""
     if days <= 0:
@@ -30,12 +49,7 @@ def purge_older_than(days: int) -> int:
     old = Evaluation.query.filter(Evaluation.created_at < cutoff).all()
     for evaluation in old:
         delete_evaluation(evaluation)
-    # Clean up anything orphaned by earlier versions.
-    used_candidates = db.session.query(Evaluation.candidate_id)
-    Candidate.query.filter(~Candidate.id.in_(used_candidates)).delete(synchronize_session=False)
-    used_jobs = db.session.query(Evaluation.job_id).filter(Evaluation.job_id.isnot(None))
-    Job.query.filter(Job.is_custom.is_(True), ~Job.id.in_(used_jobs)).delete(synchronize_session=False)
-    db.session.commit()
+    purge_orphans(max_age_hours=0)
     if old:
         logger.info("Retention: deleted %d report(s) older than %d days.", len(old), days)
     return len(old)
